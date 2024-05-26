@@ -4,13 +4,15 @@
 
     <div id="">
 
-        <form action="{% url 'index' %}" method="post" class = "input_form p-5 shadow">
+        <form action="{% url 'index' %}" method="post" class = "input_form shadow rounded bg-light ">
             
             {% csrf_token %}
 
-            {{ post_form }}
+            <div class="p-3">
+                {{ post_form }}
+            </div>
 
-            <input class="btn btn-primary btn-lg" type="submit">
+            <input class="btn btn-primary btn-lg input_button py-4" type="submit" value="Publish">
         </form>
 
     </div>

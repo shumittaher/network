@@ -1,4 +1,8 @@
 .input_form{
     display: grid;
-    row-gap: 1rem;
+}
+
+.input_form > input{
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
 }
