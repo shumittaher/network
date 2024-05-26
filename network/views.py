@@ -3,12 +3,13 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django import forms
 
-from .models import User
-
+from .models import User, Post 
+from .forms import PostForm
 
 def index(request):
-    return render(request, "network/index.html")
+    return render(request, "network/index.html", {'post_form' : PostForm})
 
 
 def login_view(request):

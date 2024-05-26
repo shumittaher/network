@@ -1,13 +1,21 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    TODO
 
-    <div id="app">
+    <div id="">
+
+        <form action="{% url 'index' %}" method="post">
+            
+            {% csrf_token %}
+
+            {{ post_form }}
+
+            <input class="btn btn-primary btn-lg" type="submit">
+        </form>
 
     </div>
 
-    <div id="app2">
+    <div id="post_list">
 
     </div>
 
@@ -15,18 +23,15 @@
 
     <script type="text/babel">
 
-        function App() {
+        function Post_list() {
+
             return (
                 <div>
-                    Hello!
-
-
-
+                    
                 </div>
             );
         }
 
-        ReactDOM.render(<App />, document.querySelector("#app"));
-        ReactDOM.render(<App />, document.querySelector("#app2"));
+        ReactDOM.render(<Post_list />, document.querySelector("#post_list"));
     </script>
 {% endblock %}
