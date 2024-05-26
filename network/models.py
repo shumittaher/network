@@ -11,3 +11,4 @@ class Post(models.Model):
     post_title = models.CharField(max_length=200)
     post_text = models.TextField()
     post_timestamp = models.DateTimeField('date published', auto_now_add=True)
+    poster = models.ForeignKey(User, on_delete=models.DO_NOTHING)

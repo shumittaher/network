@@ -9,8 +9,18 @@ from .models import User, Post
 from .forms import PostForm
 
 def index(request):
-    return render(request, "network/index.html", {'post_form' : PostForm})
 
+    if request.method == "POST":
+
+        filled_post = PostForm(request.POST)
+        if filled_post.is_valid():
+            filled_post.save()
+        
+        return HttpResponseRedirect(reverse('index'))
+        
+    new_post_form  = PostForm(initial={'poster':request.user.id})
+
+    return render(request, "network/index.html", {'post_form' : new_post_form})
 
 def login_view(request):
     if request.method == "POST":

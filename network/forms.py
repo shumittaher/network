@@ -10,6 +10,7 @@ class PostForm(forms.ModelForm):
     widgets = {
         'post_title': widgets.TextInput(attrs={'class': 'form-control'}),
         'post_text': widgets.Textarea(attrs={'class': 'form-control'}),
+        'poster': widgets.HiddenInput
     }
 
     labels = {
