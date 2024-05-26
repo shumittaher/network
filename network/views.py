@@ -3,7 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django import forms
+from django.http import JsonResponse
 
 from .models import User, Post 
 from .forms import PostForm
@@ -17,12 +17,21 @@ def index(request):
             filled_post.save()
         
         return HttpResponseRedirect(reverse('index'))
-        
+          
     new_post_form  = PostForm(initial={'poster':request.user.id})
 
-    return render(request, "network/index.html", {'post_form' : new_post_form})
+    return render(request, "network/index.html", {
+        'post_form' : new_post_form,
+    })
+
+
+def post_supply(request):
+    posts = Post.objects.all()
+    post_data = [post.to_dict() for post in posts]
+    return JsonResponse(post_data, safe=False)
 
 def login_view(request):
+
     if request.method == "POST":
 
         # Attempt to sign user in

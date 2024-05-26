@@ -12,3 +12,12 @@ class Post(models.Model):
     post_text = models.TextField()
     post_timestamp = models.DateTimeField('date published', auto_now_add=True)
     poster = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+
+    def to_dict(self):
+        return {
+        'post_id': self.post_id,
+        'post_title': self.post_title,
+        'post_text': self.post_text,
+        'post_timestamp': self.post_timestamp.isoformat(),
+        'poster': self.poster.username
+        }
