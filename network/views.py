@@ -26,7 +26,7 @@ def index(request):
 
 
 def post_supply(request):
-    posts = Post.objects.all()
+    posts = Post.objects.all().order_by('-post_timestamp')
     post_data = [post.to_dict() for post in posts]
     return JsonResponse(post_data, safe=False)
 
