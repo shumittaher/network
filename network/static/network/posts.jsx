@@ -28,7 +28,13 @@ function Post_list() {
                         <h6>{post.poster}</h6>
                         <h6>{formattedDate}</h6>
                         <p className="mt-4">{post.post_text}</p>
-                    </div>
+
+                        <i class="fa-solid fa-thumbs-up"></i>
+                        <i class="fa-regular fa-thumbs-up"></i>
+                        
+                        <i class="fa-solid fa-user"></i>
+                                            
+                        </div>
             })}
 
         </div>
