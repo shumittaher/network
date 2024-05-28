@@ -36,6 +36,13 @@ def post_supply(request):
         post_dict["liked"] = request.user.id in post_dict['like_ids']
     return JsonResponse(posts_dict, safe=False)
 
+def fetch_post(request, post_id):
+
+    post = Post.objects.get(pk = post_id)
+    post_dict = post.to_dict()
+    post_dict["liked"] = request.user.id in post_dict['like_ids']
+    return JsonResponse(post_dict)
+
 def like_route(request):
 
     put_data = json.loads(request.body)

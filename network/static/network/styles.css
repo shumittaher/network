@@ -10,4 +10,33 @@
 
 .fontawesome_icons{
     font-size: 2rem;
+    cursor: pointer;
+    color: blue;
 }
+
+.post_count{
+    font-size: xx-large;
+    display: inline;
+}
+
+.like-click {
+    animation-name: like-animation; 
+    animation-duration: 0.5s; 
+    animation-timing-function: ease-in-out; 
+  }
+  
+@keyframes like-animation {
+    0% { 
+      transform: scale(1); 
+    }
+    50% { 
+      transform: scale(1.3);
+      rotate: -20deg;
+    }
+
+    100%{
+      transform: scale(1); 
+
+    }
+  }
+  
