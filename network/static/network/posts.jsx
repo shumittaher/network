@@ -22,8 +22,6 @@ function Post_list() {
                     hour: 'numeric',
                     minute: 'numeric'
                   });
-
-                console.log(post.likes)
                 
                 return <div className="column border rounded shadow p-4" key={post.post_id}>
                         <h2>{post.post_title}</h2>
@@ -31,10 +29,10 @@ function Post_list() {
                         <h6>{formattedDate}</h6>
                         <p className="mt-4">{post.post_text}</p>
 
-                        <i onClick={()=>like_handler(post.post_id, false)} class="fa-solid fa-thumbs-up fontawesome_icons"></i>
+                        {(post.liked)? 
+                        <i onClick={()=>like_handler(post.post_id, false)} class="fa-solid fa-thumbs-up fontawesome_icons"></i>:
+                        <i onClick={()=>like_handler(post.post_id, true)} class="fa-regular fa-thumbs-up fontawesome_icons"></i>}
 
-                        <i onClick={()=>like_handler(post.post_id, true)} class="fa-regular fa-thumbs-up fontawesome_icons"></i>
-                                            
                         </div>
             })}
 

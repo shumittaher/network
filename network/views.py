@@ -31,11 +31,13 @@ def index(request):
 
 def post_supply(request):
     posts = Post.objects.all().order_by('-post_timestamp')
-    post_data = [post.to_dict() for post in posts]
-    return JsonResponse(post_data, safe=False)
+    posts_dict = [post.to_dict() for post in posts]
+    for post_dict in posts_dict:
+        post_dict["liked"] = request.user.id in post_dict['like_ids']
+    return JsonResponse(posts_dict, safe=False)
 
 def like_route(request):
-    
+
     put_data = json.loads(request.body)
     required_post = get_object_or_404(Post, pk = put_data['post_id'])
 
