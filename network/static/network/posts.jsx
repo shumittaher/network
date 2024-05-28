@@ -41,7 +41,7 @@ function Post_item(incoming) {
             <p className="mt-4">{post.post_text}</p>
 
             {(post.liked)? 
-            <i ref={likeButtonRef} onClick={()=>like_handler(false)} class="fa-solid fa-thumbs-up fontawesome_icons"></i>:
+            <i ref={likeButtonRef} onClick={()=>like_handler(false)} class="fa-solid fa-thumbs-up fontawesome_icons text-primary"></i>:
             <i ref={likeButtonRef} onClick={()=>like_handler(true)} class="fa-regular fa-thumbs-up fontawesome_icons"></i>}
             
             <div className="post_count px-2 m-2">
