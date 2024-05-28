@@ -4,6 +4,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import JsonResponse
+import json
+from django.shortcuts import get_object_or_404
+
+
 
 from .models import User, Post 
 from .forms import PostForm
@@ -29,6 +33,21 @@ def post_supply(request):
     posts = Post.objects.all().order_by('-post_timestamp')
     post_data = [post.to_dict() for post in posts]
     return JsonResponse(post_data, safe=False)
+
+def like_route(request):
+    
+    put_data = json.loads(request.body)
+    required_post = get_object_or_404(Post, pk = put_data['post_id'])
+
+    if (put_data['enable']):
+        required_post.likes.add(request.user)
+    
+    if (not put_data['enable']):
+        required_post.likes.remove(request.user)
+
+    required_post.save()
+
+    return JsonResponse({},status = 200)
 
 def login_view(request):
 
