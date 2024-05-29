@@ -1,4 +1,7 @@
-ReactDOM.render(<Post_list />, document.querySelector("#post_list"));
+
+if (document.querySelector("#post_list")) {
+    ReactDOM.render(<Post_list />, document.querySelector("#post_list"));
+}
 
 function Post_list() {
     

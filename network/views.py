@@ -58,6 +58,13 @@ def like_route(request):
 
     return JsonResponse({},status = 200)
 
+def profile(request):
+
+    user = get_object_or_404(User, pk = request.user.id)
+    return render(request, 'network/profile.html',{
+        'user' : user
+        })
+
 def login_view(request):
 
     if request.method == "POST":

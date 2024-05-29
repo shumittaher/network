@@ -5,6 +5,9 @@ from django.db import models
 class User(AbstractUser):
     pass
 
+class Followings(models.Model):
+    follower = models.ForeignKey(User, on_delete=models.CASCADE)
+    followed = models.ForeignKey(User, on_delete=models.CASCADE ,related_name='followees')
 
 class Post(models.Model):
     post_id = models.AutoField(primary_key=True)

@@ -1,0 +1,50 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+<div class="mt-5">
+
+    <div class="row mb-2">
+        <h4 class="col text-end">
+            <b>
+                Name
+            </b> 
+        </h4>
+        <h4 class="col">
+            {{user.username}}
+        </h4>
+    </div>
+    <div class="row">
+        <h6 class="col text-end">
+            <b>
+                Email
+            </b> 
+        </h6>
+        <h6 class="col">
+            {{user.email}}
+        </h6>
+    </div>
+    <div class="row">
+        <h6 class="col text-end">
+            <b>
+                Last Login
+            </b> 
+        </h6>
+        <h6 class="col">
+            {{user.last_login}}
+        </h6>
+    </div>
+    <div class="row">
+        <h6 class="col text-end">
+            <b>
+                Active Since
+            </b> 
+        </h6>
+        <h6 class="col">
+            {{user.date_joined}}
+        </h6>
+    </div>
+
+</div>
+
+{% endblock %}
