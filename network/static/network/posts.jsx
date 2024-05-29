@@ -55,12 +55,14 @@ function Post_item(incoming) {
 
         let temp_post
         let animation_running = true
-        likeButtonRef.current.classList.add('like-click');
+        likeButtonRef.current.classList.add('animation_like_click');
 
         likeButtonRef.current.addEventListener('animationend', animation_end)
 
         function animation_end() {
-            
+
+            likeButtonRef.current.classList.remove('animation_like_click');
+
             animation_running = false
             likeButtonRef.current.removeEventListener('animationend', animation_end)
             setTempPostToPost()

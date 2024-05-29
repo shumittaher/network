@@ -18,13 +18,35 @@
     display: inline;
 }
 
-.like-click {
-    animation-name: like-animation; 
+#post_form_collapse_span {
+    font-size: x-large;
+    white-space: nowrap; 
+}
+
+.animation_like_click{
+    animation-name: like_animation; 
     animation-duration: 0.5s; 
     animation-timing-function: ease-in-out; 
   }
+
+.animation_div_size{
+    animation-name: div_size_animation; 
+    animation-duration: 0.5s; 
+    animation-timing-function: ease-in-out; 
+  }
+
+@keyframes div_size_animation {
+
+  0% {
+    width: 100%;
+  }
+
+  100% {
+     width: 0%;
+  }
+}
   
-@keyframes like-animation {
+@keyframes like_animation {
     0% { 
       transform: scale(1); 
     }
