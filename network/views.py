@@ -7,9 +7,7 @@ from django.http import JsonResponse
 import json
 from django.shortcuts import get_object_or_404
 
-
-
-from .models import User, Post 
+from .models import User, Post, Followings
 from .forms import PostForm
 
 def index(request):
@@ -29,19 +27,23 @@ def index(request):
     })
 
 
-def post_supply(request):
-    posts = Post.objects.all().order_by('-post_timestamp')
-    posts_dict = [post.to_dict() for post in posts]
+def post_supply(request, post_id = None):
+
+    if not post_id:
+        # Fetch all posts (ordered by timestamp)
+        posts = Post.objects.all().order_by('-post_timestamp')
+        posts_dict = [post.to_dict() for post in posts]
+    else:
+        # Fetch single post
+        post = Post.objects.get(pk=post_id)
+        posts_dict = [post.to_dict()]
+
+    # Add "liked" flag for each post
     for post_dict in posts_dict:
         post_dict["liked"] = request.user.id in post_dict['like_ids']
+
     return JsonResponse(posts_dict, safe=False)
 
-def fetch_post(request, post_id):
-
-    post = Post.objects.get(pk = post_id)
-    post_dict = post.to_dict()
-    post_dict["liked"] = request.user.id in post_dict['like_ids']
-    return JsonResponse(post_dict)
 
 def like_route(request):
 
@@ -58,11 +60,16 @@ def like_route(request):
 
     return JsonResponse({},status = 200)
 
-def profile(request):
+def profile(request, user_id):
 
-    user = get_object_or_404(User, pk = request.user.id)
+    user = get_object_or_404(User, pk = user_id)
+
+    follow_outgoing = Followings.objects.filter(follower = user)
+
+
     return render(request, 'network/profile.html',{
-        'user' : user
+        'profile_user' : user,
+        'follow_outgoing' : follow_outgoing
         })
 
 def login_view(request):

@@ -19,11 +19,12 @@ class Post(models.Model):
 
     def to_dict(self):
         return {
-        'post_id': self.post_id,
-        'post_title': self.post_title,
-        'post_text': self.post_text,
-        'post_timestamp': self.post_timestamp.isoformat(),
-        'poster': self.poster.username,
-        'like_ids': [user.id for user in self.likes.all()],
-        'likes_count': self.likes.count()
+            'post_id': self.post_id,
+            'post_title': self.post_title,
+            'post_text': self.post_text,
+            'post_timestamp': self.post_timestamp.isoformat(),
+            'poster': self.poster.username,
+            'poster_id': self.poster.id,
+            'like_ids': [user.id for user in self.likes.all()],
+            'likes_count': self.likes.count()
         }

@@ -11,7 +11,7 @@
             </b> 
         </h4>
         <h4 class="col">
-            {{user.username}}
+            {{profile_user.username}}
         </h4>
     </div>
     <div class="row">
@@ -21,7 +21,7 @@
             </b> 
         </h6>
         <h6 class="col">
-            {{user.email}}
+            {{profile_user.email}}
         </h6>
     </div>
     <div class="row">
@@ -31,7 +31,7 @@
             </b> 
         </h6>
         <h6 class="col">
-            {{user.last_login}}
+            {{profile_user.last_login}}
         </h6>
     </div>
     <div class="row">
@@ -41,9 +41,15 @@
             </b> 
         </h6>
         <h6 class="col">
-            {{user.date_joined}}
+            {{profile_user.date_joined}}
         </h6>
     </div>
+
+    {% for followee in follow_outgoing %}
+
+        {{followee}}
+
+    {% endfor %}
 
 </div>
 

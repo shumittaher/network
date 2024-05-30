@@ -39,7 +39,11 @@ function Post_item(incoming) {
     
     return <div className="column border rounded shadow p-4" key={post.post_id}>
             <h2>{post.post_title}</h2>
-            <h6>{post.poster}</h6>
+            <h6>
+                <a href={`/profile/${post.poster_id}`}>
+                    {post.poster}
+                </a>
+            </h6>
             <h6>{formattedDate}</h6>
             <p className="mt-4">{post.post_text}</p>
 
@@ -86,7 +90,7 @@ function Post_item(incoming) {
                 fetch(`/fetch_post/${post.post_id}`)
                 .then(response => response.json())
                 .then(data=>{
-                    temp_post = data
+                    temp_post = data[0]
                     if (!animation_running){
                         setTempPostToPost()
                     }
