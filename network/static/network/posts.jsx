@@ -40,7 +40,7 @@ function Post_item(incoming) {
     return <div className="column border rounded shadow p-4" key={post.post_id}>
             <h2>{post.post_title}</h2>
             <h6>
-                <a href={`/profile/${post.poster_id}`}>
+                <a href={`/profile/${post.poster_id}`} style={{textDecoration: 'none'}}>
                     {post.poster}
                 </a>
             </h6>
