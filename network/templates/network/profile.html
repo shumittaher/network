@@ -6,11 +6,7 @@
 
     <div class="d-flex justify-content-center mb-3">
 
-        {% for follower_pair in follow_incoming %}
-            {{follower_pair.follower.username}}
-        {% endfor %}
-
-        <button onclick="send_follow()" class="btn btn-outline-primary btn-lg">
+        <button id="follow_button" data-follow-status="{{i_follow}}" onclick="send_follow()" class="btn btn-outline-primary btn-lg">
             Follow
         </button>
     
@@ -65,6 +61,23 @@
 
 
 <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        const follow_button = document.getElementById('follow_button')
+        update_button()
+
+    })
+
+    function update_button() {
+        if (follow_button.dataset.followStatus == 'True') {
+            follow_button.innerText = 'Followed'
+            follow_button.classList.replace('btn-outline-primary', 'btn-primary')
+        } else {
+            follow_button.innerText = 'Follow'
+            follow_button.classList.replace('btn-primary', 'btn-outline-primary')
+        }
+    }
 
     async function send_follow() {
        

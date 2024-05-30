@@ -75,14 +75,22 @@ def follow_route(request, user_id):
 
 def profile(request, user_id):
 
-    user = get_object_or_404(User, pk = user_id)
-    follow_outgoing = user.followers.all()
-    follow_incoming = user.followees.all()
+    profile_user = get_object_or_404(User, pk = user_id)
+    follow_outgoing = profile_user.followers.all()
+    follow_incoming = profile_user.followees.all()
+
+    i_follow = False
+
+    for pair in follow_incoming:
+        if request.user.id == pair.follower.id:
+            print(request.user.id, pair.follower.id)
+            i_follow = True
 
     return render(request, 'network/profile.html',{
-        'profile_user' : user,
+        'profile_user' : profile_user,
         'follow_outgoing' : follow_outgoing,
-        'follow_incoming' : follow_incoming
+        'follow_incoming' : follow_incoming,
+        'i_follow': i_follow
         })
 
 def login_view(request):
