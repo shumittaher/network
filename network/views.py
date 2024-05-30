@@ -26,7 +26,6 @@ def index(request):
         'post_form' : new_post_form,
     })
 
-
 def post_supply(request, post_id = None):
 
     if not post_id:
@@ -44,7 +43,6 @@ def post_supply(request, post_id = None):
 
     return JsonResponse(posts_dict, safe=False)
 
-
 def like_route(request):
 
     put_data = json.loads(request.body)
@@ -60,16 +58,31 @@ def like_route(request):
 
     return JsonResponse({},status = 200)
 
+def follow_route(request, user_id):
+
+    followee = get_object_or_404(User, pk = user_id)
+
+    existing_pair = Followings.objects.filter(
+        follower=request.user, followed=followee
+    ).exists()
+
+    if not existing_pair:
+        follow_pair = Followings(follower = request.user, followed = followee)
+        follow_pair.save()
+        return JsonResponse({"status": "Followed"},status = 200)
+
+    return JsonResponse({"status": "Already Followed"},status = 200)
+
 def profile(request, user_id):
 
     user = get_object_or_404(User, pk = user_id)
-
-    follow_outgoing = Followings.objects.filter(follower = user)
-
+    follow_outgoing = user.followers.all()
+    follow_incoming = user.followees.all()
 
     return render(request, 'network/profile.html',{
         'profile_user' : user,
-        'follow_outgoing' : follow_outgoing
+        'follow_outgoing' : follow_outgoing,
+        'follow_incoming' : follow_incoming
         })
 
 def login_view(request):
@@ -92,11 +105,9 @@ def login_view(request):
     else:
         return render(request, "network/login.html")
 
-
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
-
 
 def register(request):
     if request.method == "POST":

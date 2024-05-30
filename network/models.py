@@ -6,7 +6,7 @@ class User(AbstractUser):
     pass
 
 class Followings(models.Model):
-    follower = models.ForeignKey(User, on_delete=models.CASCADE)
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
     followed = models.ForeignKey(User, on_delete=models.CASCADE ,related_name='followees')
 
 class Post(models.Model):

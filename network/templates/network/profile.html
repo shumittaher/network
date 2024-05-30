@@ -4,6 +4,18 @@
 
 <div class="mt-5">
 
+    <div class="d-flex justify-content-center mb-3">
+
+        {% for follower_pair in follow_incoming %}
+            {{follower_pair.follower.username}}
+        {% endfor %}
+
+        <button onclick="send_follow()" class="btn btn-outline-primary btn-lg">
+            Follow
+        </button>
+    
+    </div>
+
     <div class="row mb-2">
         <h4 class="col text-end">
             <b>
@@ -45,12 +57,20 @@
         </h6>
     </div>
 
-    {% for followee in follow_outgoing %}
-
-        {{followee}}
-
+    {% for followee_pair in follow_outgoing %}
+        {{followee_pair}}
     {% endfor %}
 
 </div>
+
+
+<script>
+
+    async function send_follow() {
+       
+        const response = await fetch(`/follow_route/{{profile_user.id}}`)
+    }
+
+</script>
 
 {% endblock %}
