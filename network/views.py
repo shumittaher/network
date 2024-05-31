@@ -44,34 +44,54 @@ def post_supply(request, post_id = None):
     return JsonResponse(posts_dict, safe=False)
 
 def like_route(request):
+        
+    if request.method == 'PUT':
 
-    put_data = json.loads(request.body)
-    required_post = get_object_or_404(Post, pk = put_data['post_id'])
+        put_data = json.loads(request.body)
+        required_post = get_object_or_404(Post, pk = put_data['post_id'])
 
-    if (put_data['enable']):
-        required_post.likes.add(request.user)
+        if (put_data['enable']):
+            required_post.likes.add(request.user)
+        
+        if (not put_data['enable']):
+            required_post.likes.remove(request.user)
+
+        required_post.save()
+
+        return JsonResponse({},status = 200)
     
-    if (not put_data['enable']):
-        required_post.likes.remove(request.user)
+    else:
+        return JsonResponse({'error': 'Invalid operation'},status = 400)
 
-    required_post.save()
+def follow_route(request):
 
-    return JsonResponse({},status = 200)
+    if request.method == 'PUT':
 
-def follow_route(request, user_id):
+        put_data = json.loads(request.body)
+        followee = get_object_or_404(User, pk = put_data['user_id'])
 
-    followee = get_object_or_404(User, pk = user_id)
+        try:
+            existing_pair = Followings.objects.get(
+                follower=request.user, 
+                followed=followee
+            )
+        except Followings.DoesNotExist:
+            existing_pair = None  
+        
+        if put_data['follow']:
+            if not existing_pair:
+                print("hit")
+                follow_pair = Followings(follower = request.user, followed = followee)
+                follow_pair.save()
+                return JsonResponse({"status": "Followed"},status = 200)
+            return JsonResponse({"status": "Already Followed"},status = 200)
+        else:
+            if not existing_pair:
+                return JsonResponse({"status": "Already un-Followed"},status = 200)
+            existing_pair.delete()
+            return JsonResponse({"status": "un-Followed"},status = 200)
 
-    existing_pair = Followings.objects.filter(
-        follower=request.user, followed=followee
-    ).exists()
 
-    if not existing_pair:
-        follow_pair = Followings(follower = request.user, followed = followee)
-        follow_pair.save()
-        return JsonResponse({"status": "Followed"},status = 200)
-
-    return JsonResponse({"status": "Already Followed"},status = 200)
 
 def profile(request, user_id):
 

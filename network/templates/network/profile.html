@@ -6,7 +6,7 @@
 
     <div class="d-flex justify-content-center mb-4">
 
-        <button id="follow_button" data-follow-status="{{i_follow}}" onclick="send_follow()" class="btn btn-outline-primary btn-lg">
+        <button id="follow_button" data-follow-status="{{i_follow}}" data-action="True" onclick="send_follow()" class="btn btn-outline-primary btn-lg">
             Follow
         </button>
     
@@ -62,25 +62,46 @@
 
 <script>
 
-    document.addEventListener('DOMContentLoaded', function() {
-        
+    document.addEventListener('DOMContentLoaded', function() {    
         const follow_button = document.getElementById('follow_button')
         update_button()
-
     })
 
     function update_button() {
         if (follow_button.dataset.followStatus == 'True') {
             follow_button.innerText = 'Followed'
             follow_button.classList.replace('btn-outline-primary', 'btn-primary')
+            follow_button.dataset.action = 'False'
+            
         } else {
             follow_button.innerText = 'Follow'
             follow_button.classList.replace('btn-primary', 'btn-outline-primary')
+            follow_button.dataset.action = 'True'
+
         }
     }
 
     async function send_follow() {
-        const response = await fetch(`/follow_route/{{profile_user.id}}`)
+
+        const response = await fetch('/follow_route', {
+            method:'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({
+                'user_id' : '{{profile_user.id}}',
+                'follow' : follow_button.dataset.action==='True'
+            })
+        })
+
+        const message = await response.json()
+        if (message.status == 'Followed'){
+            follow_button.dataset.followStatus = 'True'
+        } else if (message.status == 'un-Followed'){
+            follow_button.dataset.followStatus = 'False'
+        }
+        update_button() 
     }
 
 </script>

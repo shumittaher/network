@@ -12,5 +12,5 @@ urlpatterns = [
     path("fetch_post/<int:post_id>", views.post_supply, name="fetch_post"),
     path("like_route", views.like_route, name="like_route"),
     path("profile/<int:user_id>", views.profile, name="profile"),
-    path("follow_route/<int:user_id>", views.follow_route, name="follow_route")
+    path("follow_route", views.follow_route, name="follow_route")
 ]
