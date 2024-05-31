@@ -4,7 +4,7 @@
 
 <div class="mt-5">
 
-    <div class="d-flex justify-content-center mb-3">
+    <div class="d-flex justify-content-center mb-4">
 
         <button id="follow_button" data-follow-status="{{i_follow}}" onclick="send_follow()" class="btn btn-outline-primary btn-lg">
             Follow
@@ -80,7 +80,6 @@
     }
 
     async function send_follow() {
-       
         const response = await fetch(`/follow_route/{{profile_user.id}}`)
     }
 

@@ -83,7 +83,6 @@ def profile(request, user_id):
 
     for pair in follow_incoming:
         if request.user.id == pair.follower.id:
-            print(request.user.id, pair.follower.id)
             i_follow = True
 
     return render(request, 'network/profile.html',{
