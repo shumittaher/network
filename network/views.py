@@ -80,7 +80,6 @@ def follow_route(request):
         
         if put_data['follow']:
             if not existing_pair:
-                print("hit")
                 follow_pair = Followings(follower = request.user, followed = followee)
                 follow_pair.save()
                 return JsonResponse({"status": "Followed"},status = 200)
@@ -91,13 +90,13 @@ def follow_route(request):
             existing_pair.delete()
             return JsonResponse({"status": "un-Followed"},status = 200)
 
-
-
 def profile(request, user_id):
 
     profile_user = get_object_or_404(User, pk = user_id)
     follow_outgoing = profile_user.followers.all()
     follow_incoming = profile_user.followees.all()
+    follow_outgoing_count = follow_outgoing.count()
+    follow_incoming_count = follow_incoming.count()
 
     i_follow = False
 
@@ -109,7 +108,9 @@ def profile(request, user_id):
         'profile_user' : profile_user,
         'follow_outgoing' : follow_outgoing,
         'follow_incoming' : follow_incoming,
-        'i_follow': i_follow
+        'follow_outgoing_count' : follow_outgoing_count,
+        'follow_incoming_count': follow_incoming_count,
+        'i_follow': i_follow,
         })
 
 def login_view(request):
