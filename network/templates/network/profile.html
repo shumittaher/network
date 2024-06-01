@@ -67,9 +67,9 @@
         </div>
     </div>
 
-    <div id="follows_section" class="row">
+    <div class="row">
 
-        <div class="col text-end">
+        <div id="followers_section" class="col text-end">
             {% for followee_pair in follow_outgoing %}
             <div>
                 {{followee_pair.followed}}
@@ -95,6 +95,8 @@
 
         const follow_button = document.getElementById('follow_button')
         update_button()
+
+        // fetch_followers('{{profile_user.id}}','True')
 
     })
 
@@ -133,6 +135,14 @@
             follow_button.dataset.followStatus = 'False'
         }
         update_button() 
+    }
+
+    async function fetch_followers(profile_id, followers) {
+
+        const response = await fetch(`/followers_supply/${profile_id}/${followers}`)
+        const data = await response.json()
+
+        console.log(data)
     }
 
 </script>

@@ -113,6 +113,19 @@ def profile(request, user_id):
         'i_follow': i_follow,
         })
 
+def followers_supply(request, user_id, followers):
+
+    profile_user = get_object_or_404(User, pk = user_id)
+
+    follow_incoming = profile_user.followees.all()
+    follow_incoming_dict_array = []
+    for follow_incoming_pair in follow_incoming:
+        follow_incoming_dict_array.append({'follower': follow_incoming_pair.follower.username})
+
+    print(follow_incoming_dict_array)
+
+    return JsonResponse(follow_incoming_dict_array, status = 200, safe=False)
+
 def login_view(request):
 
     if request.method == "POST":
