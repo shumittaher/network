@@ -118,7 +118,8 @@ def followers_supply(request, user_id, followers):
         target_pairs = profile_user.followers.all()
       
     for pair in target_pairs:
-        resulting_array.append({'target_man': pair.follower.username})
+        resulting_array.append({'follower': pair.follower.username,
+                                'followed': pair.followed.username,})
     
     return JsonResponse(resulting_array, status = 200, safe=False)
 

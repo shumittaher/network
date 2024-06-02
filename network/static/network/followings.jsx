@@ -69,8 +69,15 @@ function Followees() {
         fetch_followers(profile_id, 'False', setfollowees)
     }, []);
 
-    return follow_list(followees)
+    return <div>
+            
+            {
+                followees.map((follower)=>(
+                        <h6>{follower.followed}</h6>
+                    ))
+            }
 
+        </div>
 }
 
 function Followers(params) {
@@ -86,22 +93,17 @@ function Followers(params) {
         }
     }, [followerRefresh]);
     
-    return follow_list(followers)
-
-}
-
-function follow_list(follow_array) {
-        
-        return <div>
+    return <div>
             
-                {
-                    follow_array.map((follower)=>(
-                            <h6>{follower.target_man}</h6>
-                        ))
-                }
+            {
+                followers.map((follower)=>(
+                        <h6>{follower.follower}</h6>
+                    ))
+            }
 
         </div>
-}
+}   
+
 
 async function fetch_followers(profile_id, followers, setFunction) {
 
