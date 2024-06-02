@@ -57,24 +57,7 @@
     const profile_name = '{{profile_user.username}}'
     const i_follow = '{{i_follow}}'
     const csrf = '{{ csrf_token }}'
-
-
-    function update_button() {
-        if (follow_button.dataset.followStatus == 'True') {
-            follow_button.innerText = 'Followed'
-            follow_button.classList.replace('btn-outline-primary', 'btn-primary')
-            follow_button.dataset.action = 'False'
-            
-        } else {
-            follow_button.innerText = 'Follow'
-            follow_button.classList.replace('btn-primary', 'btn-outline-primary')
-            follow_button.dataset.action = 'True'
-
-        }
-    }
-
     
-
 </script>
 
 {% endblock %}
