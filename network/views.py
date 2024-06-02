@@ -93,10 +93,7 @@ def follow_route(request):
 def profile(request, user_id):
 
     profile_user = get_object_or_404(User, pk = user_id)
-    follow_outgoing = profile_user.followers.all()
     follow_incoming = profile_user.followees.all()
-    follow_outgoing_count = follow_outgoing.count()
-    follow_incoming_count = follow_incoming.count()
 
     i_follow = False
 
@@ -106,25 +103,24 @@ def profile(request, user_id):
 
     return render(request, 'network/profile.html',{
         'profile_user' : profile_user,
-        'follow_outgoing' : follow_outgoing,
-        'follow_incoming' : follow_incoming,
-        'follow_outgoing_count' : follow_outgoing_count,
-        'follow_incoming_count': follow_incoming_count,
         'i_follow': i_follow,
         })
 
 def followers_supply(request, user_id, followers):
 
     profile_user = get_object_or_404(User, pk = user_id)
+    resulting_array = []
 
-    follow_incoming = profile_user.followees.all()
-    follow_incoming_dict_array = []
-    for follow_incoming_pair in follow_incoming:
-        follow_incoming_dict_array.append({'follower': follow_incoming_pair.follower.username})
-
-    print(follow_incoming_dict_array)
-
-    return JsonResponse(follow_incoming_dict_array, status = 200, safe=False)
+    if followers == 'True':
+        target_pairs = profile_user.followees.all()
+        
+    else:
+        target_pairs = profile_user.followers.all()
+      
+    for pair in target_pairs:
+        resulting_array.append({'target_man': pair.follower.username})
+    
+    return JsonResponse(resulting_array, status = 200, safe=False)
 
 def login_view(request):
 

@@ -44,61 +44,20 @@
             {{profile_user.date_joined}}
         </h6>
     </div>
-
-    <div class="d-flex justify-content-center my-4">
-
-        <button id="follow_button" data-follow-status="{{i_follow}}" data-action="True" onclick="send_follow()" class="py-3 btn btn-outline-primary" style="width: 10em;">
-            Follow
-        </button>
-    
+   
+    <div id="follow_grid">
     </div>
 
-    <div class="row mb-2">
-        <div class="col text-end">
-            <h6>
-                {{profile_user.username}} Follows <span class="mx-2">{{follow_outgoing_count}}</span>
-            </h6>
-        </div>
-
-        <div class="col">
-            <h6>
-                {{profile_user.username}}'s Followers <span class="mx-2">{{follow_incoming_count}}</span>
-            </h6>
-        </div>
-    </div>
-
-    <div class="row">
-
-        <div id="followers_section" class="col text-end">
-            {% for followee_pair in follow_outgoing %}
-            <div>
-                {{followee_pair.followed}}
-            </div>
-            {% endfor %}
-        </div>
-
-        <div class="col">
-            {% for follower_pair in follow_incoming %}
-            <div>
-                {{follower_pair.follower}}
-            </div>
-            {% endfor %}
-        </div>
-        
-    </div>
 </div>
 
 
 <script>
 
-    document.addEventListener('DOMContentLoaded', function() {    
+    const profile_id = '{{profile_user.id}}'
+    const profile_name = '{{profile_user.username}}'
+    const i_follow = '{{i_follow}}'
+    const csrf = '{{ csrf_token }}'
 
-        const follow_button = document.getElementById('follow_button')
-        update_button()
-
-        // fetch_followers('{{profile_user.id}}','True')
-
-    })
 
     function update_button() {
         if (follow_button.dataset.followStatus == 'True') {
@@ -114,36 +73,7 @@
         }
     }
 
-    async function send_follow() {
-
-        const response = await fetch('/follow_route', {
-            method:'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}'
-            },
-            body: JSON.stringify({
-                'user_id' : '{{profile_user.id}}',
-                'follow' : follow_button.dataset.action==='True'
-            })
-        })
-
-        const message = await response.json()
-        if (message.status == 'Followed'){
-            follow_button.dataset.followStatus = 'True'
-        } else if (message.status == 'un-Followed'){
-            follow_button.dataset.followStatus = 'False'
-        }
-        update_button() 
-    }
-
-    async function fetch_followers(profile_id, followers) {
-
-        const response = await fetch(`/followers_supply/${profile_id}/${followers}`)
-        const data = await response.json()
-
-        console.log(data)
-    }
+    
 
 </script>
 
