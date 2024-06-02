@@ -10,7 +10,9 @@ function Follow_grid() {
     return <div>
 
         <div class="d-flex justify-content-center my-4">
-            <Follow_button setFollowerRefresh ={setFollowerRefresh}/>
+        {i_follow=='Self'?"":
+            <Follow_button setFollowerRefresh = {setFollowerRefresh}/>
+        }
         </div>
         
         <div className="row mb-2">

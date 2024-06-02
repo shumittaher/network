@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 
 from .models import User, Post, Followings
 from .forms import PostForm
+from .utils import findExisting
 
 def index(request):
 
@@ -70,13 +71,7 @@ def follow_route(request):
         put_data = json.loads(request.body)
         followee = get_object_or_404(User, pk = put_data['user_id'])
 
-        try:
-            existing_pair = Followings.objects.get(
-                follower=request.user, 
-                followed=followee
-            )
-        except Followings.DoesNotExist:
-            existing_pair = None  
+        existing_pair = findExisting(request.user, followee)
         
         if put_data['follow']:
             if not existing_pair:
@@ -93,13 +88,16 @@ def follow_route(request):
 def profile(request, user_id):
 
     profile_user = get_object_or_404(User, pk = user_id)
-    follow_incoming = profile_user.followees.all()
 
-    i_follow = False
-
-    for pair in follow_incoming:
-        if request.user.id == pair.follower.id:
+    if request.user != profile_user:
+        existing_pair = findExisting(request.user, profile_user)
+        if existing_pair:
             i_follow = True
+        else:
+            i_follow = False
+    else:
+        i_follow = 'Self'
+
 
     return render(request, 'network/profile.html',{
         'profile_user' : profile_user,
