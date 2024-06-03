@@ -3,14 +3,26 @@ if (document.querySelector("#post_list")) {
     ReactDOM.render(<Post_list />, document.querySelector("#post_list"));
 }
 
-function Post_list() {
+
+if (document.querySelector("#post_list_follow")) {
+    ReactDOM.render(<Post_list followed = {true} />, document.querySelector("#post_list_follow"));
+}
+
+function Post_list(params) {
+
+    let {followed} = params
     
     const [posts, setPosts] = React.useState([]);
     
-    React.useEffect(() => {
-        fetch('/post_supply')
-            .then(response=>response.json())
-            .then(results=>setPosts(results))
+    React.useEffect(async () => {
+        try {
+            const response = followed ? await fetch('/followed_post/True') : await fetch('/post_supply');
+            const post = await response.json();
+            setPosts(post);
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        }
+      
     }, []);
     
     return (

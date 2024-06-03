@@ -24,7 +24,15 @@
 
     </div>
 
-    <div id="post_list"></div>
+    {% if follow_posts == '/' %}
+
+        <div id="post_list"></div>
+
+    {% elif follow_posts == '/follow' %}
+    
+        <div id="post_list_follow"></div>
+
+    {% endif %}
 
 <script>
     const csrf = '{{ csrf_token }}'

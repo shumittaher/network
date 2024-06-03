@@ -25,6 +25,7 @@ def index(request):
 
     return render(request, "network/index.html", {
         'post_form' : new_post_form,
+        'follow_posts': request.path
     })
 
 def post_supply(request, post_id = None, follow = False):
