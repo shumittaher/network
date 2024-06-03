@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.http import JsonResponse
 import json
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+
 
 from .models import User, Post, Followings
 from .forms import PostForm
@@ -25,7 +27,7 @@ def index(request):
 
     return render(request, "network/index.html", {
         'post_form' : new_post_form,
-        'follow_posts': request.path
+        'follow_posts': request.path,
     })
 
 def post_supply(request, post_id = None, follow = False):
@@ -52,6 +54,7 @@ def post_supply(request, post_id = None, follow = False):
 
     return JsonResponse(posts_dict, safe=False)
 
+@login_required(login_url ='/login')
 def like_route(request):
         
     if request.method == 'PUT':
@@ -72,6 +75,7 @@ def like_route(request):
     else:
         return JsonResponse({'error': 'Invalid operation'},status = 400)
 
+@login_required(login_url ='/login')
 def follow_route(request):
 
     if request.method == 'PUT':
@@ -93,6 +97,7 @@ def follow_route(request):
             existing_pair.delete()
             return JsonResponse({"status": "un-Followed"},status = 200)
 
+@login_required(login_url ='/login')
 def profile(request, user_id):
 
     profile_user = get_object_or_404(User, pk = user_id)
@@ -112,6 +117,7 @@ def profile(request, user_id):
         'i_follow': i_follow,
         })
 
+@login_required(login_url ='/login')
 def followers_supply(request, user_id, followers):
 
     resulting_array = find_follow_based_on_id(user_id, followers)

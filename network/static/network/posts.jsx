@@ -31,7 +31,11 @@ function Post_list(params) {
 
             <h3 className="py-3 text-center text-primary shadow rounded"> {followed? "Followed Posts" :"All Posts"}</h3>
 
-            {posts.map(post => <Post_item key={post.post_id} post={post}/>)}
+            {
+                posts.length === 0 ? 
+                <h6 className="text-center">Nothing to Show</h6>:
+                posts.map(post => <Post_item key={post.post_id} post={post}/>)
+            }
 
         </div>
     )
