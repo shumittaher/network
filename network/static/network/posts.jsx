@@ -10,12 +10,13 @@ if (document.querySelector("#post_list_follow")) {
 function Post_list(params) {
 
     let {followed} = params
+    
     const [page, setPage] = React.useState(1)
     const [posts, setPosts] = React.useState([]);
     
     React.useEffect(async () => {
         try {
-            const response = followed ? await fetch('/followed_post/True') : await fetch(`/post_supply/${page}/False/0`);
+            const response = await fetch(`/post_supply/${page}/${followed}/0`);
             const post = await response.json();
             setPosts(post);
         } catch (error) {

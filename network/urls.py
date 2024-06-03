@@ -12,7 +12,6 @@ urlpatterns = [
     path("profile/<int:user_id>", views.profile, name="profile"),
     #json requests
     path("post_supply/<int:page>/<str:follow>/<int:post_id>", views.post_supply),
-    path("followed_post/<str:follow>", views.post_supply),
     path("fetch_post/<int:post_id>", views.post_supply),
     path("followers_supply/<int:user_id>/<str:followers>", views.followers_supply),
     path("like_route", views.like_route),
