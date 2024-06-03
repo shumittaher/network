@@ -33,11 +33,16 @@ def index(request):
 def follow(request):
     return index(request)
 
-def post_supply(request, post_id = None, follow = False):
+def post_supply(request, post_id, follow, page = 1):
+
+    follow = follow == 'True'
+
+
+    print('page', page , 'follow', follow, 'post_id', post_id)
 
     if not post_id:
         # Fetch all posts (ordered by timestamp)
-        posts = Post.objects.all().order_by('-post_timestamp')
+        posts = Post.objects.all().order_by('-post_timestamp')[(page*10)-10: page*10]
     else:
         # Fetch single post and put in an array
         posts = [Post.objects.get(pk=post_id)]
