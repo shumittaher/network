@@ -29,6 +29,8 @@ function Post_list(params) {
 
         <div className="border p-2 pt-0 row g-2 rounded mt-5">
 
+            <h3 className="py-3 text-center text-primary shadow rounded"> {followed? "Followed Posts" :"All Posts"}</h3>
+
             {posts.map(post => <Post_item key={post.post_id} post={post}/>)}
 
         </div>
