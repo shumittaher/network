@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404
 
 from .models import User, Post, Followings
 from .forms import PostForm
-from .utils import findExisting
+from .utils import findExisting, find_follow_based_on_id
 
 def index(request):
 
@@ -27,16 +27,23 @@ def index(request):
         'post_form' : new_post_form,
     })
 
-def post_supply(request, post_id = None):
+def post_supply(request, post_id = None, follow = False):
 
     if not post_id:
         # Fetch all posts (ordered by timestamp)
         posts = Post.objects.all().order_by('-post_timestamp')
-        posts_dict = [post.to_dict() for post in posts]
     else:
-        # Fetch single post
-        post = Post.objects.get(pk=post_id)
-        posts_dict = [post.to_dict()]
+        # Fetch single post and put in an array
+        posts = [Post.objects.get(pk=post_id)]
+
+    if follow:
+        followed_ids= []
+        followed_pairs = find_follow_based_on_id(request.user.id, False)
+        for pair in followed_pairs:
+            followed_ids.append(pair['followed_id'])
+        posts = posts.filter(poster__id__in=followed_ids)
+    
+    posts_dict = [post.to_dict() for post in posts]
 
     # Add "liked" flag for each post
     for post_dict in posts_dict:
@@ -106,18 +113,7 @@ def profile(request, user_id):
 
 def followers_supply(request, user_id, followers):
 
-    profile_user = get_object_or_404(User, pk = user_id)
-    resulting_array = []
-
-    if followers == 'True':
-        target_pairs = profile_user.followees.all()
-        
-    else:
-        target_pairs = profile_user.followers.all()
-      
-    for pair in target_pairs:
-        resulting_array.append({'follower': pair.follower.username,
-                                'followed': pair.followed.username,})
+    resulting_array = find_follow_based_on_id(user_id, followers)
     
     return JsonResponse(resulting_array, status = 200, safe=False)
 
