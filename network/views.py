@@ -8,7 +8,6 @@ import json
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-
 from .models import User, Post, Followings
 from .forms import PostForm
 from .utils import findExisting, find_follow_based_on_id
@@ -29,6 +28,10 @@ def index(request):
         'post_form' : new_post_form,
         'follow_posts': request.path,
     })
+
+@login_required(login_url ='/login')
+def follow(request):
+    return index(request)
 
 def post_supply(request, post_id = None, follow = False):
 
