@@ -84,7 +84,7 @@ def edit_route(request):
         if (not put_data['enable']):
             required_post.likes.remove(request.user)
 
-        if (put_data['new_post_text']):
+        if (put_data['new_post_text'] and required_post.poster.id == request.user.id):
             required_post.post_text = put_data['new_post_text']
 
         required_post.save()
