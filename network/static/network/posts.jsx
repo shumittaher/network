@@ -47,7 +47,7 @@ function Post_list(params) {
             {
                 posts.length === 0 ? 
                 <h6 className="text-center">Nothing to Show</h6>:
-                posts.map((post,index) => <Post_item key={post.post_id} post={post} serial={index+1} />)
+                posts.map((post) => <Post_item key={post.post_id} post={post}/>)
             }
 
             <nav aria-label="Page navigation">
@@ -68,7 +68,6 @@ function Post_list(params) {
 function Post_item(incoming) {
 
     const [post, setPost] = React.useState(incoming.post);
-    const serial = incoming.serial
     const likeButtonRef = React.useRef(null);
 
     let dateObject = new Date(post.post_timestamp);
@@ -81,9 +80,7 @@ function Post_item(incoming) {
         });
     
     return <div className="column border rounded shadow p-4" key={post.post_id}>
-                <div className="d-flex justify-content-between">
-                    <h2>{post.post_title}</h2><h2>{serial}</h2>
-                </div>
+                <h2>{post.post_title}</h2>
                 <h6>
                     <a href={`/profile/${post.poster_id}`} style={{textDecoration: 'none'}}>
                         {post.poster}
@@ -92,13 +89,17 @@ function Post_item(incoming) {
                 <h6>{formattedDate}</h6>
                 <p className="mt-4">{post.post_text}</p>
 
-                {(post.liked)? 
-                <i ref={likeButtonRef} onClick={()=>like_handler(false)} class="fa-solid fa-thumbs-up fontawesome_icons text-primary"></i>:
-                <i ref={likeButtonRef} onClick={()=>like_handler(true)} class="fa-regular fa-thumbs-up fontawesome_icons"></i>}
-                
-                <div className="post_count px-2 m-2">
-                    {post.likes_count}
-                </div> 
+                <div className="d-flex justify-content-between align-items-center">
+                    {(post.liked)? 
+                    <i ref={likeButtonRef} onClick={()=>like_handler(false)} class="fa-solid fa-thumbs-up fontawesome_icons text-primary"></i>:
+                    <i ref={likeButtonRef} onClick={()=>like_handler(true)} class="fa-regular fa-thumbs-up fontawesome_icons"></i>}
+                    {(post.poster_id == user_id)? <button className="btn btn-sm btn-primary">Edit</button>:""}
+                    <div className="post_count px-2 m-2">
+                        {post.likes_count}
+                    </div> 
+
+                </div>
+           
             </div>
 
 

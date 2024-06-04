@@ -28,6 +28,7 @@ def index(request):
     return render(request, "network/index.html", {
         'post_form' : new_post_form,
         'follow_posts': request.path,
+        'user_id': request.user.id
     })
 
 @login_required(login_url ='/login')
