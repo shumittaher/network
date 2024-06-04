@@ -37,5 +37,5 @@ class Post(models.Model):
             'poster': self.poster.username,
             'poster_id': self.poster.id,
             'like_ids': [user.id for user in self.likes.all()],
-            'likes_count': self.likes.count()
+            'likes_count': self.likes.count(),
         }

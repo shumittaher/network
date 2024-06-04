@@ -4,9 +4,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import JsonResponse
-import json
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+import json
+from math import ceil
 
 from .models import User, Post, Followings
 from .forms import PostForm
@@ -48,19 +49,25 @@ def post_supply(request, post_id, follow = 'false', page = 1):
                 followed_ids.append(pair['followed_id'])
             posts = posts.filter(poster__id__in=followed_ids)
 
-        posts = posts[(page*10)-10: page*10]
+        posts_in_page = posts[(page*10)-10: page*10]
+        number_of_posts = posts.count()
 
     else:
         # Fetch single post and put in an array
-        posts = [Post.objects.get(pk=post_id)]
+        posts_in_page = [Post.objects.get(pk=post_id)]
+        number_of_posts = 1
     
-    posts_dict = [post.to_dict() for post in posts]
+    page_required = ceil(number_of_posts/10)
+    
+    posts_dict = [post.to_dict() for post in posts_in_page]
 
-    # Add "liked" flag for each post
+    # Add "liked" flag and identify last post for each post
     for post_dict in posts_dict:
         post_dict["liked"] = request.user.id in post_dict['like_ids']
 
-    return JsonResponse(posts_dict, safe=False)
+    result_dict = {'posts_dict': posts_dict , 'last_page': page == page_required}
+
+    return JsonResponse(result_dict, safe=False)
 
 @login_required(login_url ='/login')
 def like_route(request):

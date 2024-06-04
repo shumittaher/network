@@ -13,12 +13,14 @@ function Post_list(params) {
     
     const [page, setPage] = React.useState(1)
     const [posts, setPosts] = React.useState([]);
+    const [last_page, setlast_page] = React.useState(false);
     
     React.useEffect(async () => {
         try {
             const response = await fetch(`/post_supply/${page}/${followed}/0`);
             const post = await response.json();
-            setPosts(post);
+            setPosts(post.posts_dict);
+            setlast_page(post.last_page);
         } catch (error) {
             console.error('Error fetching posts:', error);
         }
@@ -37,7 +39,7 @@ function Post_list(params) {
     
     return (
 
-        <div className="border p-2 pt-0 row g-2 rounded mt-5">
+        <div className="border p-2 pt-0 row g-2 rounded mt-3">
 
             <h3 className="py-3 text-center text-primary shadow rounded"> {followed? "Followed Posts" :"All Posts"}</h3>
 
@@ -49,11 +51,11 @@ function Post_list(params) {
 
             <nav aria-label="Page navigation">
             <ul onClick={(event)=>changePage(event)} className="justify-content-center pagination">
-                <li class="page-item"><a class="page-link" data-page={page-1} href="#post_list">Previous</a></li>
+                <li class="page-item"><a class={`page-link ${page-1 === 0 ? 'disabled' : ''}`} data-page={page-1} href="#post_list">Previous</a></li>
                 <li class="page-item"><a class="page-link" data-page={midpage-1} href="#post_list">{midpage-1}</a></li>
-                <li class="page-item"><a class="page-link" data-page={midpage} href="#post_list">{midpage}</a></li>
-                <li class="page-item"><a class="page-link" data-page={midpage+1} href="#post_list">{midpage+1}</a></li>
-                <li class="page-item"><a class="page-link" data-page={page+1}  href="#post_list">Next</a></li>
+                <li class="page-item"><a class={`page-link ${last_page ? 'disabled' : ''}`} data-page={midpage} href="#post_list">{midpage}</a></li>
+                <li class="page-item"><a class={`page-link ${last_page ? 'disabled' : ''}`} data-page={midpage+1} href="#post_list">{midpage+1}</a></li>
+                <li class="page-item"><a class={`page-link ${last_page ? 'disabled' : ''}`} data-page={page+1}  href="#post_list">Next</a></li>
             </ul>
             </nav>
         </div>
@@ -76,25 +78,24 @@ function Post_item(incoming) {
         });
     
     return <div className="column border rounded shadow p-4" key={post.post_id}>
-            <div className="d-flex justify-content-between">
-                <h2>{post.post_title}</h2><h2>{serial}</h2>
-            </div>
-            <h6>
-                <a href={`/profile/${post.poster_id}`} style={{textDecoration: 'none'}}>
-                    {post.poster}
-                </a>
-            </h6>
-            <h6>{formattedDate}</h6>
-            <p className="mt-4">{post.post_text}</p>
+                <div className="d-flex justify-content-between">
+                    <h2>{post.post_title}</h2><h2>{serial}</h2>
+                </div>
+                <h6>
+                    <a href={`/profile/${post.poster_id}`} style={{textDecoration: 'none'}}>
+                        {post.poster}
+                    </a>
+                </h6>
+                <h6>{formattedDate}</h6>
+                <p className="mt-4">{post.post_text}</p>
 
-            {(post.liked)? 
-            <i ref={likeButtonRef} onClick={()=>like_handler(false)} class="fa-solid fa-thumbs-up fontawesome_icons text-primary"></i>:
-            <i ref={likeButtonRef} onClick={()=>like_handler(true)} class="fa-regular fa-thumbs-up fontawesome_icons"></i>}
-            
-            <div className="post_count px-2 m-2">
-                {post.likes_count}
-            </div> 
-
+                {(post.liked)? 
+                <i ref={likeButtonRef} onClick={()=>like_handler(false)} class="fa-solid fa-thumbs-up fontawesome_icons text-primary"></i>:
+                <i ref={likeButtonRef} onClick={()=>like_handler(true)} class="fa-regular fa-thumbs-up fontawesome_icons"></i>}
+                
+                <div className="post_count px-2 m-2">
+                    {post.likes_count}
+                </div> 
             </div>
 
 
@@ -130,7 +131,7 @@ function Post_item(incoming) {
                 fetch(`/fetch_post/${post.post_id}`)
                 .then(response => response.json())
                 .then(data=>{
-                    temp_post = data[0]
+                    temp_post = data.posts_dict[0]
                     if (!animation_running){
                         setTempPostToPost()
                     }
@@ -139,7 +140,6 @@ function Post_item(incoming) {
         })
         
         function setTempPostToPost() {
-            
             if (temp_post){
                 setPost(temp_post)
                 temp_post = null}
