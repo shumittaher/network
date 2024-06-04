@@ -69,6 +69,9 @@ function Post_item(incoming) {
 
     const [post, setPost] = React.useState(incoming.post);
     const likeButtonRef = React.useRef(null);
+    const text_field_ref = React.useRef(null);
+    const edit_field_ref = React.useRef(null);
+
 
     let dateObject = new Date(post.post_timestamp);
     const formattedDate = dateObject.toLocaleDateString('en-US', {
@@ -78,16 +81,28 @@ function Post_item(incoming) {
         hour: 'numeric',
         minute: 'numeric'
         });
-    
+
+    const paragraphs = post.post_text.split('\n');
+
+
     return <div className="column border rounded shadow p-4" key={post.post_id}>
                 <h2>{post.post_title}</h2>
+
                 <h6>
                     <a href={`/profile/${post.poster_id}`} style={{textDecoration: 'none'}}>
                         {post.poster}
                     </a>
                 </h6>
+
                 <h6>{formattedDate}</h6>
-                <p className="mt-4 text-justify">{post.post_text}</p>
+
+                <div ref={text_field_ref} className="mt-4">
+                    {paragraphs.map((paragraph) => (
+                        <p key={paragraph}>{paragraph}</p>
+                    ))}
+                </div>
+
+                <textarea ref={edit_field_ref} className="form-control w-100" style={{display: 'none'}}></textarea>
 
                 <div className="d-flex align-items-center">
                     {(post.liked)? 
@@ -96,11 +111,23 @@ function Post_item(incoming) {
                     <div className="post_count px-2 m-2 flex-fill">
                         {post.likes_count}
                     </div> 
-                    {(post.poster_id == user_id)? <button className="btn btn-sm btn-primary">Edit</button>:""}
+                    {(post.poster_id == user_id)? <button onClick={handle_edit} className="btn btn-sm btn-primary">Edit</button>:""}
 
                 </div>
            
             </div>
+
+    function handle_edit() {
+        
+        if (text_field_ref.current) {
+            edit_field_ref.current.value = post.post_text
+            text_field_ref.current.style.display = 'none';
+        }
+        edit_field_ref.current.style.display = 'block'
+        edit_field_ref.current.style.height = `${edit_field_ref.current.scrollHeight + 20}px`
+        edit_field_ref.current.focus()
+
+    }
 
 
     function like_handler(enable_like) {
