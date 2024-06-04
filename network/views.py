@@ -71,7 +71,7 @@ def post_supply(request, post_id, follow = 'false', page = 1):
     return JsonResponse(result_dict, safe=False)
 
 @login_required(login_url ='/login')
-def like_route(request):
+def edit_route(request):
         
     if request.method == 'PUT':
 
@@ -83,6 +83,9 @@ def like_route(request):
         
         if (not put_data['enable']):
             required_post.likes.remove(request.user)
+
+        if (put_data['new_post_text']):
+            required_post.post_text = put_data['new_post_text']
 
         required_post.save()
 

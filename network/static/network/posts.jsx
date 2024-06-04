@@ -1,3 +1,4 @@
+
 if (document.querySelector("#post_list")) {
     ReactDOM.render(<Post_list />, document.querySelector("#post_list"));
 }
@@ -68,9 +69,40 @@ function Post_list(params) {
 function Post_item(incoming) {
 
     const [post, setPost] = React.useState(incoming.post);
+    const [editMode, seteditMode] = React.useState(false);
+
     const likeButtonRef = React.useRef(null);
     const text_field_ref = React.useRef(null);
     const edit_field_ref = React.useRef(null);
+    const save_button_ref = React.useRef(null);
+    const edit_button_ref = React.useRef(null);
+
+    React.useEffect(() => {
+        
+        if (editMode){
+
+            save_button_ref.current.style.display = 'block';
+            edit_field_ref.current.style.display = 'block';
+            edit_button_ref.current.style.display = 'none';
+            text_field_ref.current.style.display = 'none';
+
+            edit_field_ref.current.value = post.post_text
+            edit_field_ref.current.style.height = `${edit_field_ref.current.scrollHeight + 20}px`
+            edit_field_ref.current.focus()
+
+        } else {
+
+            text_field_ref.current.style.display = 'block';
+            edit_button_ref.current.style.display = 'block';
+            edit_field_ref.current.style.display = 'none';
+            save_button_ref.current.style.display = 'none';
+
+        }          
+
+        return () => {
+            
+        };
+    }, [editMode]);
 
 
     let dateObject = new Date(post.post_timestamp);
@@ -82,6 +114,7 @@ function Post_item(incoming) {
         minute: 'numeric'
         });
 
+    
     const paragraphs = post.post_text.split('\n');
 
 
@@ -111,24 +144,49 @@ function Post_item(incoming) {
                     <div className="post_count px-2 m-2 flex-fill">
                         {post.likes_count}
                     </div> 
-                    {(post.poster_id == user_id)? <button onClick={handle_edit} className="btn btn-sm btn-primary">Edit</button>:""}
+                    <div ref={edit_button_ref}>
+                    {(post.poster_id == user_id)? <button onClick={()=>{seteditMode(true)}} className="btn btn-sm btn-primary">Edit</button>:""}
+                    </div>
+
+                    <button ref={save_button_ref} onClick={handle_save} style={{display: 'none'}} className="btn btn-sm btn-primary">Save</button>
 
                 </div>
            
             </div>
 
-    function handle_edit() {
+    async function handle_save() {
+
+        const newtext = await saveAndFetch({
+            'post_id' : post.post_id,
+            'new_post_text' : edit_field_ref.current.value,
+            'enable': false
+        })
+
+        const new_post = newtext.posts_dict[0]
         
-        if (text_field_ref.current) {
-            edit_field_ref.current.value = post.post_text
-            text_field_ref.current.style.display = 'none';
-        }
-        edit_field_ref.current.style.display = 'block'
-        edit_field_ref.current.style.height = `${edit_field_ref.current.scrollHeight + 20}px`
-        edit_field_ref.current.focus()
+        setPost(new_post)
+        seteditMode(false)
 
     }
 
+    async function saveAndFetch(data_for_sending) {
+
+        const re = await fetch('/edit_route', {
+            method:'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrf
+            },
+            body: JSON.stringify(data_for_sending)
+        })
+
+        if (re.status == 200){
+        const response = await fetch(`/fetch_post/${post.post_id}`)
+        const data = await response.json()
+
+        return data }
+        return {error: 'error'}
+    }
 
     function like_handler(enable_like) {
 
@@ -147,7 +205,7 @@ function Post_item(incoming) {
             setTempPostToPost()
         }
 
-        fetch('/like_route', {
+        fetch('/edit_route', {
             method:'PUT',
             headers: {
                 'Content-Type': 'application/json',
