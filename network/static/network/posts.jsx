@@ -99,9 +99,6 @@ function Post_item(incoming) {
 
         }          
 
-        return () => {
-            
-        };
     }, [editMode]);
 
 
@@ -161,10 +158,8 @@ function Post_item(incoming) {
             'new_post_text' : edit_field_ref.current.value,
             'enable': false
         })
-
-        const new_post = newtext.posts_dict[0]
         
-        setPost(new_post)
+        setPost(newtext)
         seteditMode(false)
 
     }
@@ -184,11 +179,11 @@ function Post_item(incoming) {
         const response = await fetch(`/fetch_post/${post.post_id}`)
         const data = await response.json()
 
-        return data }
+        return data.posts_dict[0] }
         return {error: 'error'}
     }
 
-    function like_handler(enable_like) {
+    async function like_handler(enable_like) {
 
         let temp_post
         let animation_running = true
@@ -205,28 +200,16 @@ function Post_item(incoming) {
             setTempPostToPost()
         }
 
-        fetch('/edit_route', {
-            method:'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrf
-            },
-            body: JSON.stringify({
-                'post_id' : post.post_id,
-                'enable' : enable_like
-            })
-        }).then(response => {if (response.status == 200) {
-             
-                fetch(`/fetch_post/${post.post_id}`)
-                .then(response => response.json())
-                .then(data=>{
-                    temp_post = data.posts_dict[0]
-                    if (!animation_running){
-                        setTempPostToPost()
-                    }
-                })
-            }
-        })
+        const like_data = {
+            'post_id' : post.post_id,
+            'enable' : enable_like,
+            'new_post_text' : false
+        }
+
+        temp_post = await saveAndFetch(like_data)
+        if (!animation_running){
+            setTempPostToPost()
+        }
         
         function setTempPostToPost() {
             if (temp_post){
