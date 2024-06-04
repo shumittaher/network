@@ -87,16 +87,16 @@ function Post_item(incoming) {
                     </a>
                 </h6>
                 <h6>{formattedDate}</h6>
-                <p className="mt-4">{post.post_text}</p>
+                <p className="mt-4 text-justify">{post.post_text}</p>
 
-                <div className="d-flex justify-content-between align-items-center">
+                <div className="d-flex align-items-center">
                     {(post.liked)? 
                     <i ref={likeButtonRef} onClick={()=>like_handler(false)} class="fa-solid fa-thumbs-up fontawesome_icons text-primary"></i>:
                     <i ref={likeButtonRef} onClick={()=>like_handler(true)} class="fa-regular fa-thumbs-up fontawesome_icons"></i>}
-                    {(post.poster_id == user_id)? <button className="btn btn-sm btn-primary">Edit</button>:""}
-                    <div className="post_count px-2 m-2">
+                    <div className="post_count px-2 m-2 flex-fill">
                         {post.likes_count}
                     </div> 
+                    {(post.poster_id == user_id)? <button className="btn btn-sm btn-primary">Edit</button>:""}
 
                 </div>
            
