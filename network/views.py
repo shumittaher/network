@@ -65,7 +65,7 @@ def post_supply(request, post_id, follow = 'false', page = 1):
     for post_dict in posts_dict:
         post_dict["liked"] = request.user.id in post_dict['like_ids']
 
-    result_dict = {'posts_dict': posts_dict , 'last_page': page == page_required}
+    result_dict = {'posts_dict': posts_dict , 'last_page': page_required}
 
     return JsonResponse(result_dict, safe=False)
 

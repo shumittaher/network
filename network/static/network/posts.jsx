@@ -27,16 +27,17 @@ function Post_list(params) {
       
     }, [page]);
 
-    let midpage = parseInt(page < 2 ? 2 : page)
-
     function changePage(event){
-
+        
         const fetchpage = (event.target.dataset.page)
-        if (fetchpage != 0) {
+
+        if (fetchpage && fetchpage <= last_page) {
             setPage(fetchpage)
         }
     }
     
+    let page_no = parseInt(page)
+
     return (
 
         <div className="border p-2 pt-0 row g-2 rounded mt-3">
@@ -51,11 +52,13 @@ function Post_list(params) {
 
             <nav aria-label="Page navigation">
             <ul onClick={(event)=>changePage(event)} className="justify-content-center pagination">
-                <li class="page-item"><a class={`page-link ${page-1 === 0 ? 'disabled' : ''}`} data-page={page-1} href="#post_list">Previous</a></li>
-                <li class="page-item"><a class="page-link" data-page={midpage-1} href="#post_list">{midpage-1}</a></li>
-                <li class="page-item"><a class={`page-link ${last_page ? 'disabled' : ''}`} data-page={midpage} href="#post_list">{midpage}</a></li>
-                <li class="page-item"><a class={`page-link ${last_page ? 'disabled' : ''}`} data-page={midpage+1} href="#post_list">{midpage+1}</a></li>
-                <li class="page-item"><a class={`page-link ${last_page ? 'disabled' : ''}`} data-page={page+1}  href="#post_list">Next</a></li>
+                <li class="page-item"><a class={`page-link ${page_no - 1 <= 0 ? 'disabled' : ''}`} data-page={page_no-1} href="#post_list">Previous</a></li>
+                <li class="page-item"><a class={`page-link ${page_no - 2 <= 0 ? 'd-none' : ''}`} data-page={page_no-2} href="#post_list">{page_no-2}</a></li>
+                <li class="page-item"><a class={`page-link ${page_no - 1 <= 0 ? 'd-none' : ''}`} data-page={page_no-1} href="#post_list">{page_no-1}</a></li>
+                <li class="page-item"><a class="page-link" data-page={page_no} href="#post_list">{page_no}</a></li>
+                <li class="page-item"><a class={`page-link ${last_page < page_no + 1 ? 'disabled' : ''}`} data-page={page_no+1} href="#post_list">{page_no+1}</a></li>
+                <li class="page-item"><a class={`page-link ${last_page < page_no + 2 ? 'disabled' : ''}`} data-page={page_no+2} href="#post_list">{page_no+2}</a></li>
+                <li class="page-item"><a class={`page-link ${last_page < page_no + 1 ? 'disabled' : ''}`} data-page={page_no+1}  href="#post_list">Next</a></li>
             </ul>
             </nav>
         </div>
