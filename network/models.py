@@ -19,6 +19,12 @@ class Followings(models.Model):
     def save(self, *args, **kwargs):
         self.clean()
         return super().save(*args, **kwargs)
+    
+    def cannot_follow_self(self):
+        return self.followed != self.follower
+    
+    class Meta:
+        unique_together = ('follower', 'followed')
 
 class Post(models.Model):
     post_id = models.AutoField(primary_key=True)
