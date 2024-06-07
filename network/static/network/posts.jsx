@@ -3,25 +3,30 @@ if (document.querySelector("#post_list")) {
     ReactDOM.render(<Post_list />, document.querySelector("#post_list"));
 }
 
-
 if (document.querySelector("#post_list_follow")) {
     ReactDOM.render(<Post_list followed = {true} />, document.querySelector("#post_list_follow"));
 }
 
+if (document.querySelector("#profile_posts")) {
+    ReactDOM.render(<Post_list profile = {true} />, document.querySelector("#profile_posts"));
+}
+
 function Post_list(params) {
 
-    let {followed} = params
-    
+    let {followed, profile} = params
+   
     const [page, setPage] = React.useState(1)
     const [posts, setPosts] = React.useState([]);
     const [last_page, setlast_page] = React.useState(false);
-    
+
     React.useEffect(async () => {
+
         try {
-            const response = await fetch(`/post_supply/${page}/${followed}/0`);
+            const response = await fetch(`/post_supply/${page}/${followed}/0/${profile?profile_id:0}`);
             const post = await response.json();
             setPosts(post.posts_dict);
             setlast_page(post.last_page);
+            
         } catch (error) {
             console.error('Error fetching posts:', error);
         }
@@ -39,11 +44,19 @@ function Post_list(params) {
     
     let page_no = parseInt(page)
 
+    let profile_section_title
+    if (!profile){
+        profile_section_title = followed? "Followed Posts" : "All Posts"
+    } else {
+        profile_section_title = "Profile Posts"
+    }
+
+
     return (
 
         <div className="border p-2 pt-0 row g-2 rounded mt-3">
 
-            <h3 className="py-3 text-center text-primary shadow rounded"> {followed? "Followed Posts" :"All Posts"}</h3>
+            <h3 className="py-3 text-center text-primary shadow rounded"> {profile_section_title}</h3>
 
             {
                 posts.length === 0 ? 

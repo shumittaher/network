@@ -35,13 +35,16 @@ def index(request):
 def follow(request):
     return index(request)
 
-def post_supply(request, post_id, follow = 'false', page = 1):
+def post_supply(request, post_id, follow = 'false', page = 1, profile_id = 0):
 
     follow = follow == 'true'
 
     if not post_id:
-        # Fetch all posts (ordered by timestamp)
-        posts = Post.objects.all().order_by('-post_timestamp')
+
+        if profile_id:
+            posts = Post.objects.filter(poster = profile_id).order_by('-post_timestamp')
+        else:
+            posts = Post.objects.all().order_by('-post_timestamp')
 
         if follow:
             followed_ids= []
@@ -133,6 +136,7 @@ def profile(request, user_id):
 
     return render(request, 'network/profile.html',{
         'profile_user' : profile_user,
+        'user_id': request.user.id,
         'i_follow': i_follow,
         })
 

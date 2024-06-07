@@ -11,7 +11,7 @@ urlpatterns = [
     path("register", views.register, name="register"),
     path("profile/<int:user_id>", views.profile, name="profile"),
     #json requests
-    path("post_supply/<int:page>/<str:follow>/<int:post_id>", views.post_supply),
+    path("post_supply/<int:page>/<str:follow>/<int:post_id>/<int:profile_id>", views.post_supply),
     path("fetch_post/<int:post_id>", views.post_supply),
     path("followers_supply/<int:user_id>/<str:followers>", views.followers_supply),
     path("edit_route", views.edit_route),
