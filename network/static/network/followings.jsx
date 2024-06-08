@@ -14,19 +14,6 @@ function Follow_grid() {
             <Follow_button setFollowerRefresh = {setFollowerRefresh}/>
         }
         </div>
-        
-        <div className="row mb-2">
-            <div className="col text-end">
-                <h6>
-                    {profile_name}'s Followers 
-                </h6>
-            </div>
-            <div className="col">
-                <h6>
-                    {profile_name} Follows
-                </h6>
-            </div>
-        </div>
 
         <div className="row">
             <div className="col text-end">
@@ -72,7 +59,13 @@ function Followees() {
     }, []);
 
     return <div>
-            
+
+            <div className="col">
+                <h6>
+                    {profile_name} Follows ({followees.length})
+                </h6>
+            </div>
+                       
             {
                 followees.map((follower)=>(
                         <h6>{follower.followed}</h6>
@@ -96,6 +89,12 @@ function Followers(params) {
     }, [followerRefresh]);
     
     return <div>
+
+            <div className="col text-end">
+                <h6>
+                    {profile_name}'s Followers ({followers.length})
+                </h6>
+            </div>
             
             {
                 followers.map((follower)=>(
